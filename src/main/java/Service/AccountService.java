@@ -17,6 +17,9 @@ public class AccountService {
         if(account.getUsername().equals("")){
             return null;
         }
+        if(accountDao.geAccountByUsername(account.username) != null){
+            return null;
+        }
         return accountDao.insertAccount(account);
     }
 }

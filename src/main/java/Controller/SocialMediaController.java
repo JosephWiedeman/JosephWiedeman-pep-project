@@ -14,6 +14,10 @@ import Service.AccountService;
  */
 public class SocialMediaController {
     AccountService accountService;
+
+    public SocialMediaController(){
+        accountService = new AccountService();
+    }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
      * suite must receive a Javalin object from this method.
@@ -37,9 +41,9 @@ public class SocialMediaController {
     private void postAccountHandler(Context ctx) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Account author = mapper.readValue(ctx.body(), Account.class);
-        Account addedAuthor = accountService.addAccount(author);
-        if(addedAuthor!=null){
-            ctx.json(mapper.writeValueAsString(addedAuthor));
+        Account addedAccount = accountService.addAccount(author);
+        if(addedAccount!=null){
+            ctx.json(mapper.writeValueAsString(addedAccount));
         }else{
             ctx.status(400);
         }
