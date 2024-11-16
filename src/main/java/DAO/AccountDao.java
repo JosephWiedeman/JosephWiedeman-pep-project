@@ -9,7 +9,7 @@ import java.util.List;
 
 public class AccountDao {
 
-    private AccountDao(){
+    /*private AccountDao(){
 
     }
     private static AccountDao accountDao = null; 
@@ -19,9 +19,9 @@ public class AccountDao {
             accountDao = new AccountDao();
         }
         return accountDao;
-    }
+    }*/
 
-    public Account insertAuthor(Account account){
+    public Account insertAccount (Account account){
         Connection connection = ConnectionUtil.getConnection();
         try {
 //          Write SQL logic here. You should only be inserting with the name column, so that the database may
