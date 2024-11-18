@@ -5,7 +5,9 @@ import io.javalin.http.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import Model.Account;
+import Model.Message;
 import Service.AccountService;
+import Service.MessageService;
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -14,10 +16,13 @@ import Service.AccountService;
  */
 public class SocialMediaController {
     AccountService accountService;
+    MessageService messageService;
+
 
     //Sets up the services for the account and messages when the controller is made
     public SocialMediaController(){
         accountService = new AccountService();
+        messageService = new MessageService();
     }
     /**
      * In order for the test cases to work, you will need to write the endpoints in the startAPI() method, as the test
@@ -28,6 +33,7 @@ public class SocialMediaController {
         Javalin app = Javalin.create();
         app.post("/register", this::postAccountHandler);
         app.post("/login", this::postLoginHandler);
+        app.post("/messages", this::postMessageHandler);
 
         return app;
     }
@@ -61,6 +67,22 @@ public class SocialMediaController {
             ctx.json(mapper.writeValueAsString(addedAccount));
         }else{
             ctx.status(401);
+        }
+    }
+
+    /**
+     *  Handler for posting new messages to the database (Requirement #3)
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
+     */
+    private void postMessageHandler(Context ctx) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        Message message = mapper.readValue(ctx.body(), Message.class);
+        Message addedMessage = messageService.addMessage(message);
+        if(addedMessage!=null){
+            ctx.json(mapper.writeValueAsString(addedMessage));
+        }else{
+            ctx.status(400);
         }
     }
 

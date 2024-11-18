@@ -63,6 +63,32 @@ public class AccountDao {
     }
 
     /**
+     * Gets the only account for given account_id, since it is a reference key for the message table. 
+     * @param accountId The account_id for a given account
+     * @return Return the account with the given account_id, or return null if it is not there
+     */
+    public Account getAccountByAccountId(int accountId){
+        Connection connection = ConnectionUtil.getConnection();
+        try{
+            String sql = "SELECT * FROM account WHERE account_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, accountId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                return new Account(rs.getInt("account_id"),
+                rs.getString("username"),
+                rs.getString("password"));
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
+    
+
+    /**
      * Gets an account from the database based on the account's username and password
      * @param account The account to look for in the database
      * @return Returns the only account with the given username/password, or return null if not present
