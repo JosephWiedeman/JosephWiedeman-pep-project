@@ -67,5 +67,23 @@ public class MessageService {
         return null;
     }
 
+    /**
+     * Uses the messageDAO to update message text for a message with the specific message_id.
+     * @param messageId The message_id to be used to search for in the database
+     * @param messageText The updated message_text for the specific message
+     * @return message with the specific message_id that was updated, or null if it doesn't follow parameters.
+     */
+    public Message updateMessageTextByMessageId(int messageId, String messageText){
+        //This could be used to determine the message is present, but because the select does
+        //that for us in the update function, it is not entirely required and this speeds up the program
+        //if(messageDao.getMessageByMessageId(messageId) == null){
+        //    return null;
+        //}
+        if(messageText.length() <= 0 || messageText.length() > 255){
+            return null;
+        }
+        return messageDao.updateMessageTextByMessageId(messageId, messageText);
+    }
+
 
 }

@@ -107,5 +107,41 @@ public class MessageDao {
         }
         
     }
+
+    /**
+     * Updates the only message for a given message_id with the updated message_text, then finds the
+     * updated message and returns the now updated message
+     * @param messageId The message_id for a given message
+     * @param messageText The updated message_text used to update the table for given message
+     * @return Returns the updated message with the updated message_text
+     */
+    public Message updateMessageTextByMessageId(int messageId, String messageText){
+        Connection connection = ConnectionUtil.getConnection();
+        try{
+            //Updates the message with message_text for message with given message_id
+            String sql = "UPDATE message SET message_text = ? WHERE message_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, messageText);
+            preparedStatement.setInt(2, messageId);
+            preparedStatement.executeUpdate();
+
+            //Finds updated message using message_id
+            sql = "SELECT * FROM message WHERE message_id = ?";
+            preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, messageId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                return new Message(rs.getInt("message_id"),
+                rs.getInt("posted_by"),
+                rs.getString("message_text"),
+                rs.getLong("time_posted_epoch"));
+            }
+            
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
     
 }
