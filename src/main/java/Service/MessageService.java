@@ -17,8 +17,8 @@ public class MessageService {
     /**
      *  Adds message to the database from the given endpoint, or don't if message length is greater than 255,
      *  blank message, or if the posted_by, or an user's account_id, is not present in the account database
-     * @param account The account to be added to the database
-     * @return Return the account that was added, or null if it violates certain condition
+     * @param message The message to be added to the database
+     * @return Return the message that was added, or null if it violates certain conditions
      */
     public Message addMessage(Message message){
         //SQL does help with the message size being over 255, 
@@ -39,6 +39,15 @@ public class MessageService {
      */
     public List<Message> getAllMessages(){
         return messageDao.getAllMessages();
+    }
+
+    /**
+     * Uses the messageDAO to retrieve message with the specific message_id.
+     * @param messageId The message_id to be used to search for in the database
+     * @return message with the specific message_id.
+     */
+    public Message getMessageByMessageId(int messageId){
+        return messageDao.getMessageByMessageId(messageId);
     }
 
 }

@@ -9,6 +9,8 @@ import Model.Message;
 import Service.AccountService;
 import Service.MessageService;
 import java.util.List;
+import java.util.Objects;
+
 
 /**
  * TODO: You will need to write your own endpoints and handlers for your controller. The endpoints you will need can be
@@ -36,7 +38,7 @@ public class SocialMediaController {
         app.post("/login", this::postLoginHandler);
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
-
+        app.get("/messages/{message_id}", this::getMessageByMessageIdHandler);
         return app;
     }
 
@@ -91,11 +93,26 @@ public class SocialMediaController {
     /**
      *  Handler for getting all messages from the message database (Requirement #4)
      * @param ctx The Javalin Context object manages information about both the HTTP request and response.
-     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
      */
     public void getAllMessagesHandler(Context ctx){
         List<Message> messages = messageService.getAllMessages();
         ctx.json(messages);
+    }
+
+    /**
+     *  Handler for getting messages from the message database based on message_id (Requirement #5)
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
+     */
+    public void getMessageByMessageIdHandler(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        int messageId = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("message_id")));
+        Message message = messageService.getMessageByMessageId(messageId);
+        if(message!=null){
+            ctx.json(mapper.writeValueAsString(message));
+        }else{
+            ctx.json("");
+        }
     }
 
 }

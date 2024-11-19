@@ -64,5 +64,30 @@ public class MessageDao {
         }
         return messages;
     }
+
+    /**
+     * Gets the only message for given message_id 
+     * @param messageId The message_id for a given message
+     * @return Return the message with the given message_id, or return null if it is not there
+     */
+    public Message getMessageByMessageId(int messageId){
+        Connection connection = ConnectionUtil.getConnection();
+        try{
+            String sql = "SELECT * FROM message WHERE message_id = ?";
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, messageId);
+
+            ResultSet rs = preparedStatement.executeQuery();
+            while(rs.next()){
+                return new Message(rs.getInt("message_id"),
+                rs.getInt("posted_by"),
+                rs.getString("message_text"),
+                rs.getLong("time_posted_epoch"));
+            }
+        }catch(SQLException e){
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
     
 }
