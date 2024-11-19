@@ -50,4 +50,22 @@ public class MessageService {
         return messageDao.getMessageByMessageId(messageId);
     }
 
+    /**
+     * Uses the messageDAO to retrieve message with the specific message_id, and if it is there, delete the message data.
+     * @param messageId The message_id to be used to search for in the database and to be possibly deleted
+     * @return message with the specific message_id that was deleted, or null if it doesn't exist in the table.
+     */
+    public Message deleteMessageByMessageId(int messageId){
+        //Determines if the message is present in the database first
+        Message deletedMessage = messageDao.getMessageByMessageId(messageId);
+        if(deletedMessage != null){
+            //If the message is in the database, delete the message and return the message with the message_id
+            messageDao.deleteMessageByMessageId(messageId);
+            return deletedMessage;
+        }
+        //If the message is not in the database, then just return null 
+        return null;
+    }
+
+
 }

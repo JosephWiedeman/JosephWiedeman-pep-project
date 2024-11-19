@@ -39,6 +39,7 @@ public class SocialMediaController {
         app.post("/messages", this::postMessageHandler);
         app.get("/messages", this::getAllMessagesHandler);
         app.get("/messages/{message_id}", this::getMessageByMessageIdHandler);
+        app.delete("/messages/{message_id}", this::deleteMessageByMessageIdHandler);
         return app;
     }
 
@@ -111,6 +112,24 @@ public class SocialMediaController {
         if(message!=null){
             ctx.json(mapper.writeValueAsString(message));
         }else{
+            ctx.json("");
+        }
+    }
+
+     /**
+     *  Handler for deleteing messages from the message database based on message_id (Requirement #6)
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
+     */
+    public void deleteMessageByMessageIdHandler(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        int messageId = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("message_id")));
+        Message message = messageService.deleteMessageByMessageId(messageId);
+        if(message!=null){
+            ctx.json(mapper.writeValueAsString(message));
+        }else{
+            //Empty message and status is set to 200, just in case
+            ctx.status(200);
             ctx.json("");
         }
     }
