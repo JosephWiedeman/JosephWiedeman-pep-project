@@ -85,5 +85,13 @@ public class MessageService {
         return messageDao.updateMessageTextByMessageId(messageId, messageText);
     }
 
+     /**
+     * Uses the messageDAO to retrieve message with the specific user who posted it, or posted_by.
+     * @param messageId The posted_byd to be used to search for the user's messages in the database
+     * @return list of messages posted by a specific user.
+     */
+    public List<Message> getMessageByPostedBy(int postedBy){
+        return messageDao.getMessageByPostedBy(postedBy);
+    }
 
 }

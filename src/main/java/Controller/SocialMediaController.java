@@ -41,6 +41,7 @@ public class SocialMediaController {
         app.get("/messages/{message_id}", this::getMessageByMessageIdHandler);
         app.delete("/messages/{message_id}", this::deleteMessageByMessageIdHandler);
         app.patch("/messages/{message_id}", this::patchMessageUpdate);
+        app.get("/accounts/{account_id}/messages", this::getAllMessagesForUserHandler);
         return app;
     }
 
@@ -153,6 +154,17 @@ public class SocialMediaController {
         }else{
             ctx.status(400);
         }
+    }
+
+    /**
+     *  Handler for getting all messages from the message database for a certain user (Requirement #8)
+     * @param ctx The Javalin Context object manages information about both the HTTP request and response.
+     * @throws JsonProcessingException will be thrown if there is an issue converting JSON into an object.
+     */
+    public void getAllMessagesForUserHandler(Context ctx) throws JsonProcessingException{
+        int accountId = Integer.parseInt(Objects.requireNonNull(ctx.pathParam("account_id")));
+        List<Message> messages = messageService.getMessageByPostedBy(accountId);
+        ctx.json(messages);
     }
 
 }
